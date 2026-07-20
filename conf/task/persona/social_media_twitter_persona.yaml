@@ -1,0 +1,61 @@
+package: task
+name: single_tweet_persona
+entry_point: pipeline.persona.single_tweet_persona.single_tweet_persona
+
+dataset:
+  # Path to the raw social-media post dataset. See README for how to obtain the
+  # public Bluesky corpus and point DATA_ROOT at it.
+  path: ${oc.env:DATA_ROOT}/two-million-bluesky-posts/
+  entry_point: pipeline.persona.single_tweet_persona.load_bluesky_data_dask
+
+max_persona_number: 20
+min_tweet_number: 10
+max_tweet_number: 100
+
+# -1 samples users at random; any other value starts iterating from that index.
+starting_index: -1
+
+prompt:
+  base: |
+    You are tasked to detect if the current tweet contains useful information about the user's background and preferences. If yes, please summarise the possible information revealed about the user briefly. It is okay to make reasonable assumptions about the user and separate the tags with commas. If no or it is not clear, please return "N/A". Also provide the justification for your answer.
+
+    Example 1:
+      Input:
+        User Name: <USER NAME>
+        User Tweet: I took 5,252 photos last night 😳
+
+      Output:
+        {
+          "UsefulInformation": True,
+          "Justification": "The user took a lot of photos in just one night, so they are probably into photography.",
+          "UserInformation": "Photography Lover"
+        }
+
+    Example 2:
+      Input:
+        User Name: <USER NAME>
+        User Tweet: @<USER NAME> yes
+
+      Output:
+        {
+          "UsefulInformation": False,
+          "Justification": "A simple reply to a tweet with no context",
+          "UserInformation": "N/A"
+        }
+
+    Example 3:
+      Input:
+        User Name: <USER NAME>
+        User Tweet: “We can reduce risk by regularly washing our hands, not going to work or school if we are sick, and getting the flu shot to reduce overcrowding at health-care facilities during the outbreak.”
+        Evergreen advice, really.
+
+      Output:
+        {
+          "UsefulInformation": True,
+          "Justification": "The user shares public health advice and emphasizes its importance, suggesting an interest in health, safety, or public awareness.",
+          "UserInformation": "Health-Conscious; Values Public Health Advice"
+        }
+
+    Given the following user tweet, predict if it contains useful information about the user. Only return the results in JSON.
+    User Name: TEMPLATE_USER_NAME
+    User Tweet: TEMPLATE_TWEET

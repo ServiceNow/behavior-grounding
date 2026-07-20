@@ -1,0 +1,36 @@
+package: data
+variant: raw_descriptors
+name: recbench_persona_sft_${task.dataset.name}_${task.variant}
+entry_point: pipeline.data.recbench_persona_sft_from_inference.recbench_persona_sft_from_inference
+
+dataset:
+  name: netflix
+  inference_csv_path: ${oc.env:PWD}/outputs/data/recbench_interest_${task.dataset.name}_${task.variant}/${model.name}/inference_results.csv
+
+labels:
+  positive: "YES"
+  negative: "NO"
+  accepted: ["YES", "NO", "MAYBE"]
+
+history_bounds:
+  books: [1, 52]
+  lastfm: [100, 100]
+  microlens: [3, 15]
+  netflix: [1, 100]
+  pens: [1, 274]
+
+train_ratio: 0.9
+
+system_prompt: |
+  You are a recommender. I will provide user behavior sequence, and a candidate item. Please response "YES" or "NO" to represent whether this user is interested in this item. You are not allowed to response any other words for any explanation or note. Now, your role formally begins. Any other information should not disturb you.
+
+user_prompt_template: |
+  User behavior sequence:
+  {history}
+  Candidate item: {candidate}
+
+output:
+  cleaned_interest_path: ${oc.env:PWD}/persistent_data/sft_recbench_persona_ablation/recbench_persona_${task.variant}_${task.dataset.name}_interest_with_justification.csv
+  sft_full_path: ${oc.env:PWD}/persistent_data/sft_recbench_persona_ablation/recbench_persona_${task.variant}_${task.dataset.name}_sft.csv
+  sft_train_path: ${oc.env:PWD}/persistent_data/sft_recbench_persona_ablation/recbench_persona_${task.variant}_${task.dataset.name}_sft_train.csv
+  sft_test_path: ${oc.env:PWD}/persistent_data/sft_recbench_persona_ablation/recbench_persona_${task.variant}_${task.dataset.name}_sft_test.csv

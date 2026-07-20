@@ -1,0 +1,3 @@
+initialise_method: pipeline.inference.inference.initialise_llm_transformers
+inference_method: pipeline.inference.inference.transformers_run_inference
+batch_size: 128

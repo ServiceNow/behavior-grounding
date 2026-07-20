@@ -1,0 +1,63 @@
+package: finetuning
+name: sft_v2
+entry_point: pipeline.finetuning.sft_v2.sft_v2
+
+dataset:
+  path: ${oc.env:PWD}/persistent_data/data/recommendation_baseline_zero_qa_pairs.csv
+  down_sample_size: 10000
+  train_test_split_ratio: 0.9
+
+training:
+  num_train_epochs: 10
+  per_device_train_batch_size: 1
+  per_device_eval_batch_size: 1
+  gradient_accumulation_steps: 8
+  learning_rate: 1e-5
+  weight_decay: 0.01
+  warmup_ratio: 0.1
+  logging_steps: 10
+  save_steps: 500
+  eval_steps: 500
+  save_total_limit: 10
+  save_strategy: "steps"  # "steps" or "epoch" - use "epoch" to save at end of each epoch
+  eval_strategy: "steps"  # "steps" or "epoch" - use "epoch" to eval at end of each epoch
+  load_best_model_at_end: true
+  metric_for_best_model: "eval_loss"
+  greater_is_better: false
+  bf16: true
+  fp16: false
+  dataloader_num_workers: 2
+  remove_unused_columns: false
+  max_length: 6000
+  # LoRA: Enable to use LoRA adapters (parameter-efficient fine-tuning)
+  # Works with FSDP, uses full precision (bf16)
+  use_lora: false
+  # Quantization: Enable for 4-bit quantization (QLoRA = quantization + LoRA)
+  # When enabled, FSDP is automatically disabled and device_map="auto" is used
+  # Note: quantization=true automatically enables LoRA
+  quantization: false
+  # LoRA hyperparameters (used when use_lora=true OR quantization=true)
+  lora_r: 64          # LoRA rank - higher = more parameters, better quality, more memory
+  lora_alpha: 16      # LoRA alpha - scaling factor
+  lora_dropout: 0.1   # LoRA dropout
+  early_stopping_patience: 10
+  early_stopping_threshold: 0.001
+  use_early_stopping: false
+  enable_thinking: false
+  # Completion-only loss: When true, uses prompt-completion format instead of chat template
+  # Format: {"prompt": "...", "completion": "..."} instead of {"text": "..."}
+  # Only completion tokens contribute to loss, prompt tokens are masked
+  completion_only_loss: false
+
+eval:
+  entry_point: pipeline.finetuning.eval_callbacks.iterative_rec_eval_callback
+  eval_synthetic_train_dataset_path: None
+  eval_dataset_path: ${oc.env:PWD}/persistent_data/eval/processed_direct_zero_df.csv
+  eval_synthetic_dataset_path: ${oc.env:PWD}/persistent_data/eval/bluesky_recommendation_persona_all_data_13k_test.csv
+  sample_number: 10000
+  debug_print: true
+  max_new_tokens: 8
+  temperature: 0.8
+  top_p: 0.8
+  top_k: 20
+  eval_batch_size: 256

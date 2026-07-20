@@ -1,0 +1,48 @@
+package: evaluate
+name: bluesky_persona_predict
+entry_point: pipeline.evaluate.twitter_persona_predict.twitter_persona_predict
+
+dataset:
+  path: ${oc.env:DATA_ROOT}/two-million-bluesky-posts
+  loader: pipeline.dataset_utils.twitter.load_bluesky_data
+  persona_path: ${oc.env:PWD}/persistent_data/user_profile/bluesky/single_tweet_dedupe_user_profile_bluesky_anonymized.csv
+  twitter_path: ${oc.env:PWD}/outputs/bluesky_single_tweet_larger_scale_labelling
+  
+
+
+
+# -1 unlimited
+max_persona_number: 200
+tweet_per_query: 1
+max_tweet_per_persona: 5
+#Because we cannot test with the tweet that is used to contruct the persona, we need to exclude some tweets from the user's own tweets.
+exclude_tweet_number: 100
+positive_example_ratio: 0.5
+
+
+prompt:
+  base: |
+    You are tasked to predict if a tweet or a series of tweets is from a specific user or not. You will be given the user's profile, descriptions and a list of tweets to predict. Also provide the justification for your answer. Below are the instructions to follow. 
+    1. Summarise the tweet's topic and content, check if the topic and content are related to the user's interests in the profile, if not, then there's highly chance that the tweet is not from the user.
+    2. Check if the tweet's language, writing style, tone or word usage matches the user's profile, if not, then there's highly chance that the tweet is not from the user.
+    3. If you are provided with plural tweets, also check the general pattern of the tweets. The list of tweets you see will come from a single user.
+
+    Example Input:
+      User Name: Paulmck888
+      User Profile: "@user is a Sydney-based Australian business owner working across conveyancing and property valuation (API member) who also runs an Indian/Tandoori catering venture. Client-focused and detail-oriented, they emphasize professionalism, affordability, empathy, and risk management. They follow the Australian property market, central-bank and corporate news, and tax policy (including U.S. property tax). Personal interests include airports/air travel, maritime history, community events and public speaking, and coastal activities around the Northern Beaches; they are spiritually inclined (celebrate Diwali, believe in karma) and occasionally voice support for a local MP."
+      Tweet 1: Y’all I’m so hype! I’ll be performing at my first festival on August 14th!
+      Be sure to come and check out the performance 🤸‍♀️🤸‍♀️🤸‍♀️
+      Get your tickets today! The link is in my bio ✨
+      #luckysummer #musicfestivals #independentartist #livemusic [URL] [URL]
+
+    Example Output:
+      {
+        "Justification": "The tweet is about performance in a music festival, which is not related to the user's interests in the profile.",
+        "IsFromUser": false
+      }
+
+
+    Now, given the following input, please predict if the tweet is from the user or not. Only output in the format of JSON.
+    User Name: TEMPLATE_USER_NAME
+    User Profile: TEMPLATE_USER_PROFILE
+    TEMPLATE_TWEETS

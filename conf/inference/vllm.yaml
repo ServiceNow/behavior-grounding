@@ -1,0 +1,5 @@
+initialise_method: pipeline.inference.inference.initialise_llm_vllm
+inference_method: pipeline.inference.inference.vllm_run_inference
+batch_size: 128
+vllm_use_chat_template: false
+vllm_chat_template_enable_thinking: false

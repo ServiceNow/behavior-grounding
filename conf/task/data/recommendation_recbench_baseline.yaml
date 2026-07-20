@@ -1,0 +1,39 @@
+package: data
+name: recommendation_recbench_baseline
+entry_point: pipeline.data.recommendation_recbench_baseline.recommendation_recbench_baseline
+
+dataset:
+  name: mind  # Options: mind, pens, goodreads, books, movielens, microlens, netflix, cds, lastfm, hm, pog, electronics, steam, hotelrec, yelp
+  base_path: ${oc.env:DATA_ROOT}/RecBench/RecBench  # Base path to RecBench preprocessed data
+  load_method: pipeline.data.recommendation_recbench_baseline.load_recbench_pool
+
+# Recommended bounds for 95% coverage (from analysis):
+# mind: [2, 83], pens: [1, 274], goodreads: [19, 709], books: [1, 52]
+# movielens: [6, 454], netflix: [1, 100], cds: [1, 80], lastfm: [100, 100]
+# hotelrec: [1, 30], yelp: [1, 63], electronics: [1, 22], steam: [3, 100]
+# hm: [1, 62], pog: [1, 2, microlens: [3, 15]
+
+maximum_number: 100000
+interaction_size_lower_bound: 2
+interaction_size_upper_bound: 83
+
+
+prompt:
+  topic: null  # Auto-detected from dataset if null
+  base: |
+    You are a recommender. You will be shown a list of TEMPLATE_TOPIC that the user has interacted with, and a candidate item. You need to judge if the candidate item matches the user's preference. Only output a json with your judgement which should be "YES" or "NO". Also output the justification for your judgement.
+
+    Example Output Format:
+    {
+        "Justification": <your justification for your answer>,
+        "IsInterested": <YES or NO>
+    }
+
+    Now, given the following input, please judge if the candidate item matches the user's preference and provide your justification for your answer.
+
+    A user has interacted with the following TEMPLATE_TOPIC:
+    TEMPLATE_USER_INTERACTIONS
+
+    The candidate item is:
+    TEMPLATE_CANDIDATE_ITEM
+

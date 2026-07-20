@@ -1,0 +1,18 @@
+package: test_time
+name: test_time_urs_scoring
+entry_point: pipeline.test_time.test_time_urs_scoring.test_time_urs_scoring
+
+
+dataset:
+  path: ${oc.env:PWD}/outputs/task/test_time_urs_seek_creativity_persona_punish_repitition/gpt-oss-20b/inference_results.csv
+
+prompt: 
+  base: |
+    TEMPLATE_GRADING_CRITERIA
+    TEMPLATE_QUESTION
+    [参考答案开始]
+    TEMPLATE_GPT4_ANSWER
+    [参考答案结束]
+    [助手的答案开始]
+    TEMPLATE_TEST_ANSWER
+    [助手的答案结束]

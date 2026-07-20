@@ -1,0 +1,35 @@
+package: task
+name: social_media_twitter_dedupe
+entry_point: pipeline.persona.twitter_persona_dedupe.dedupe_social_media_twitter
+
+dataset:
+  path: ${oc.env:PWD}/persistent_data/user_profile/twitter_single_persona_processed_grouped.csv
+
+# -1 = unlimited
+max_persona_number: 200
+
+prompt:
+  base: |
+    You are tasked to summarise a twitter user's profile given a list of user descriptions. These descriptions might have some duplications or similar expressions. You should follow these steps to process the user descriptions.
+    1. Check each description to see if it makes sense or if it is too vague and unclear. If so, please remove it.
+    2. Identify similar or duplicate descriptions and merge them into one. For example, "crypto fan" and "blockchain enthusiast" are the same.
+    3. Identify descriptions that are contradictory with each other. If so, please remove them. For example, "satisfied customer" and "filing complaints" are contradictory.
+    4. Generate a new list of descriptions that are not contradictory and deduplicated.
+    5. Summarise the user profile in a short paragraph describing the user's characteristics and interests, based on the new list of descriptions.
+
+    Example Input:
+      User ID: <USER ID>
+      User descriptions:
+      "Amateur astronomer; Owns a telescope; Interested in astrophotography; Stargazer; Enjoys night-sky photography; Follows space missions; Space enthusiast; Interested in rockets and launches; Hiker; Enjoys camping in dark-sky areas; Outdoorsy; Coffee lover; Home barista; Enjoys pour-over coffee; Reads popular science books; Science communicator; Enjoys explaining concepts to beginners; Patient and encouraging; Lives in a rural area; Values clear night skies"
+
+    Example Output:
+      {
+        "user_id": "<USER ID>",
+        "user_description_list": "Amateur astronomer and astrophotographer; Owns a telescope; Follows space missions, rockets and launches; Outdoorsy hiker who camps in dark-sky areas; Home barista who enjoys pour-over coffee; Reads popular science and enjoys explaining concepts to beginners; Patient and encouraging; Lives in a rural area with clear night skies",
+        "user_profile": "This user is an amateur astronomer and astrophotographer who owns a telescope and closely follows space missions, rockets and launches. They are outdoorsy, enjoying hiking and camping in dark-sky areas, and live in a rural area they value for its clear night skies. A home barista fond of pour-over coffee, they also read popular science and enjoy patiently explaining concepts to beginners."
+      }
+
+    Now given these user descriptions, please follow the steps to process the user descriptions and generate the user profile. Only output in JSON format.
+
+    User ID: TEMPLATE_USER_ID
+    User descriptions: TEMPLATE_USER_DESCRIPTION_LIST

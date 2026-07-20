@@ -1,0 +1,20 @@
+package: task
+name: test_time_urs
+entry_point: pipeline.test_time.test_time_urs.test_time_urs
+
+dataset:
+  path: ${oc.env:PWD}/persistent_data/urs/urs_intent_EN_Seek_Creativity.csv
+  persona_path: ${oc.env:PWD}/persistent_data/user_profile/bluesky/single_tweet_dedupe_user_profile_bluesky.csv
+
+number_of_answers_per_query: 50
+
+prompt:
+  base: |
+    You are a language model helping a user to answer a question. You have access to a user profile. You need to answer the question based on the user profile to their preferences. 
+    User Profile: TEMPLATE_USER_PROFILE
+    Question: TEMPLATE_QUESTION
+
+vllm_use_chat_template: true
+vllm_chat_template_enable_thinking: false
+    
+vllm_chat_template_use_system_prompt: true

@@ -1,0 +1,20 @@
+package: evaluate
+name: urs_scoring
+entry_point: pipeline.evaluate.urs_scoring.urs_scoring
+
+
+dataset:
+  path: ${oc.env:DATA_ROOT}/URS/URS_dataset.csv
+  user_intention: "Ask_for_Advice"
+  use_user_profile: False
+
+prompt: 
+  base: |
+    TEMPLATE_GRADING_CRITERIA
+    TEMPLATE_QUESTION
+    [参考答案开始]
+    TEMPLATE_GPT4_ANSWER
+    [参考答案开始]
+    [助手的答案开始]
+    TEMPLATE_TEST_ANSWER
+    [助手的答案结束]

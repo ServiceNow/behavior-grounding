@@ -1,0 +1,39 @@
+package: task
+name: multiple_tweet_analyse_to_persona
+entry_point: pipeline.persona.multiple_tweet_analyse.multiple_tweet_analyse
+
+dataset:
+  path: ${oc.env:DATA_ROOT}/two-million-bluesky-posts/
+  loader: pipeline.dataset_utils.twitter.load_bluesky_data
+
+max_persona_number: 200
+min_tweet_number: 100
+max_tweet_number: 100
+number_of_tweets_per_batch: 100
+
+prompt:
+  base: |
+    You are tasked to summarise a series of tweets that contains useful information and write a short paragraph to describe the user's background and preferences. Please summarise the possible information revealed about the user briefly with a short paragraph. It is okay to make reasonable assumptions about the user. Do not only focus on a single tweet but also consider the whole pattern.
+
+    Example 1:
+      Input:
+        User Name: <USER NAME>
+        User Tweet 1: Finally finished re-tiling the bathroom this weekend. Grout everywhere but worth it 😅
+        User Tweet 2: @<USER NAME> totally agree, a good cordless drill changes everything
+        User Tweet 3: Rewatching the whole series before the new season drops. Comfort show energy.
+        User Tweet 4: Local farmers market haul: sourdough, tomatoes, and way too much cheese.
+        User Tweet 5: Trail run this morning before the heat. The city looks great from up here.
+        User Tweet 6: New espresso machine day. Dialing in the grind is a rabbit hole.
+        User Tweet 7: Anyone have recommendations for beginner woodworking projects?
+        User Tweet 8: Adopted a rescue cat. She has already claimed my desk chair.
+        User Tweet 9: Trying to eat less meat this year, mostly for the environment.
+        User Tweet 10: Weekend plan: fix the fence, then finally read that book I keep talking about.
+
+      Output:
+        {
+          "UserProfile": "This user is a hands-on, DIY-oriented person who enjoys home-improvement projects (tiling, woodworking, fence repair) and takes pride in doing things themselves. They are health-conscious and outdoorsy, going on trail runs, and are a foodie who frequents farmers markets and is getting into home espresso. They are an animal lover with a rescue cat, environmentally minded (reducing meat consumption), and enjoy relaxing with long-running TV series. Overall they value practical skills, everyday wellbeing, and simple domestic pleasures."
+        }
+
+    Given the following user tweet, only return the results in JSON.
+    User Name: TEMPLATE_USER_NAME
+    TEMPLATE_USER_TWEETS

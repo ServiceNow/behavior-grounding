@@ -1,0 +1,40 @@
+package: task
+name: test_time_urs_summary
+entry_point: pipeline.test_time.test_time_urs_summary.test_time_urs_summary
+
+
+dataset:
+  path: ${oc.env:PWD}/outputs/task/test_time_urs_summary_seek_creativity_Qwen3-8B_persona_punish_repitition/gpt-oss-120b/inference_results.csv
+
+max_answer_length: 3000
+no_cap_k_leq: 10
+number_of_answers_per_query: "1-5-10"
+# or we input a list like "10-20-30-40-50"
+
+prompt:
+  base: |
+    You are given multiple candidate answers to the same user question.
+    Write one final answer for the user.
+    Priority: maximize factual reliability and information coverage while keeping a natural assistant tone.
+
+    Hard rules:
+    1) Output only a normal user-facing answer, not planning or analysis.
+       Never write meta text like "we need to", "the task is", "across answers", "most replies", "summary", or "integrated".
+    2) Do not add facts not supported by the provided answers.
+    3) Prefer details that appear in multiple answers.
+       If key details conflict, keep the safest shared facts and briefly acknowledge uncertainty instead of guessing.
+    4) Remove low-quality content (irrelevant persona assumptions, contradictions, obvious hallucinations, or off-topic refusal text).
+    5) Preserve important specifics when supported: names, places, numbers, steps, constraints, caveats, and alternatives.
+    6) Follow explicit user constraints exactly (for example, if asked for 5 items, return exactly 5 items).
+    7) Never output placeholders or near-empty answers (for example: "...", "N/A", or blank).
+    8) If the question is underspecified (missing a key entity), ask one short clarifying question and still provide the most helpful partial answer possible.
+    9) Keep it concise but complete.
+
+    Return JSON only:
+    {
+    "summarised_final_answer": "<final user-facing answer>"
+    }
+    Question: TEMPLATE_QUESTION
+    Answers:
+    TEMPLATE_ANSWERS
+

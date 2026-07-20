@@ -1,0 +1,4 @@
+initialise_method: pipeline.inference.inference.initialise_openrouter
+inference_method: pipeline.inference.inference.openrouter_run_inference
+batch_size: 32
+max_workers: 8

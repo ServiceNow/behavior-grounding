@@ -1,0 +1,65 @@
+package: task
+name: multiple_tweet_analyse
+entry_point: pipeline.persona.multiple_tweet_analyse.multiple_tweet_analyse
+
+dataset:
+  path: ${oc.env:DATA_ROOT}/two-million-bluesky-posts/
+  loader: pipeline.dataset_utils.twitter.load_bluesky_data
+
+max_persona_number: 200
+min_tweet_number: 10
+max_tweet_number: 50
+number_of_tweets_per_batch: 5
+
+prompt:
+  base: |
+    You are tasked to detect if a series of tweets contains useful information about the user's background and preferences. If yes, please summarise the possible information revealed about the user briefly. It is okay to make reasonable assumptions about the user and separate the tags with commas. Do not only focus on a single tweet but consider the whole pattern. If no or it is not clear, please return "N/A". Also provide the justification for your answer.
+
+    Example 1:
+      Input:
+        User Name: <USER NAME>
+        User Tweet 1: New blog post: the top 3 challenges in B2B account-based marketing and how to overcome them.
+        User Tweet 2: Join our webinar on collecting and understanding the right marketing data to keep your pipeline alive.
+        User Tweet 3: Our team welcomed new colleagues to the office this week, complete with a surprise birthday cake!
+        User Tweet 4: @<USER NAME> Hi! You can keep an eye on our careers page, we post new openings fairly regularly.
+
+      Output:
+        {
+          "UsefulInformation": True,
+          "Justification": "This account posts repeatedly about marketing services, company updates, events and recruitment.",
+          "UserInformation": "B2B marketing company official account"
+        }
+
+    Example 2:
+      Input:
+        User Name: <USER NAME>
+        User Tweet 1: Our complete year-round weather guide to retiring in Florida is live.
+        User Tweet 2: New for this year: the best places to retire in North Carolina!
+        User Tweet 3: Should you learn a new instrument in retirement? We show you why the answer is YES.
+        User Tweet 4: Our list of the best places to retire in Washington State is out!
+
+      Output:
+        {
+          "UsefulInformation": True,
+          "Justification": "The user posts a lot of retirement-related information with external links and mentions of US locations. It seems to be a US-based media outlet focused on retirement.",
+          "UserInformation": "Media about retirement, based in the US"
+        }
+
+    Example 3:
+      Input:
+        User Name: <USER NAME>
+        User Tweet 1: So accurate
+        User Tweet 2: I’m SCREAMINGGGGG 😂
+        User Tweet 3: They really dropped premium headphones and said here’s a payment plan 🙃
+        User Tweet 4: I feel like I could sleep for a week..
+
+      Output:
+        {
+          "UsefulInformation": True,
+          "Justification": "The user has short posts about their everyday life.",
+          "UserInformation": "account for personal use, shares everyday life"
+        }
+
+    Given the following user tweet, only return the results in JSON.
+    User Name: TEMPLATE_USER_NAME
+    TEMPLATE_USER_TWEETS

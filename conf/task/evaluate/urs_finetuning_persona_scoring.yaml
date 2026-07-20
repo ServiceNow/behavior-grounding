@@ -1,0 +1,18 @@
+package: evaluate
+name: urs_finetuning_persona_scoring
+entry_point: pipeline.evaluate.urs_finetuning_persona_scoring.urs_finetuning_persona_scoring
+
+
+dataset:
+  path: None
+  intent: None
+  max_number: -1
+
+prompt: 
+  base: |
+    TEMPLATE_GRADING_CRITERIA
+    TEMPLATE_QUESTION
+    When you evaluate the answer's User Satisfaction, you need to consider the user's profile.
+    [助手的答案开始]
+    TEMPLATE_TEST_ANSWER
+    [助手的答案结束]

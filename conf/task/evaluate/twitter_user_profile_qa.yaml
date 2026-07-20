@@ -1,0 +1,29 @@
+package: evaluate
+name: twitter_user_profile_qa
+entry_point: pipeline.evaluate.twitter_user_profile_qa.twitter_user_profile_qa
+
+dataset:
+  path: ${oc.env:PWD}/persistent_data/instructions/twitter_user_profile_qa/user_profile_qa_easy_compact.csv
+
+
+maximum_number_of_questions: 1000
+
+prompt:
+  base: |
+   You are a helpful assistant and you need to predict the preferences and infomation about the user from the user's profile. You may not have all the information you need but you can make reasonable assumptions and guesses about the user. The answer is always "Yes" or "No". Pick the most probable answer you think. 
+
+   Example Input:
+      User Name: ikumeetsbeer
+      User Profile: @user is a Japanese‑speaking enthusiast living in the Niigata region, passionate about beer, sake, and a wide range of Japanese regional foods. They actively attend festivals such as cherry‑blossom viewings, fireworks, and Hina Matsuri, and enjoy traveling to scenic natural spots, birdwatching, and hot‑spring visits. A hobby photographer who loves dogs, they also follow fantasy/Isekai, anime, memes, and collect Gacha items. They support Japanese baseball, stay health‑conscious, and are a family‑oriented parent who shares educational content.
+      Question: Does the user know how to cook?
+
+    Example Output:
+      {
+        "Justification": "Though the user profile does not mention anything about cooking, the user stays health‑conscious, and is a family‑oriented parent and enjoys regional foods, so the user is likely to know how to cook.",
+        "Answer": "Yes"
+      }
+
+   Now given the following user's profile and question, please only output in the format of JSON.
+   User Name: TEMPLATE_USER_NAME
+   User Profile: TEMPLATE_USER_PROFILE
+   Question: TEMPLATE_QUESTION

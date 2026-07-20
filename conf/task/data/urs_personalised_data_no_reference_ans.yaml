@@ -1,0 +1,82 @@
+package: data
+name: urs_personalised_data_no_reference_ans
+entry_point: pipeline.data.urs_personalised_data.urs_personalised_data
+
+dataset:
+  path: ${oc.env:PWD}/persistent_data/urs/urs_intent_EN_Seek_Creativity.csv
+  persona_path: ${oc.env:PWD}/persistent_data/user_profile/bluesky/single_tweet_dedupe_user_profile_bluesky.csv
+
+maximum_pairs_per_person: 200
+persona_start_index: 0
+maximum_persona_number: 100
+prompt:
+  base: | 
+    You are a language model helping a user to answer a question. You have access to a user profile and a question. You need to answer the question based on the user profile. You first need to judge if this user can possibly ask this question ("MatchUserProfile"). If not, you need to output "NO" and provide the justification. If yes, you need to output "YES" and then answer the question based on the user profile.
+
+    Example Input1:
+    User Profile:
+    example_user_7,"example_user_7 is a Southern California resident who enjoys a variety of sweet snacks like chewing gum, novelty candy, biscuits and baked goods. They are a romantic, reflective person who values deep connections and is currently in a relationship. A travel enthusiast, they prefer short trips under two weeks, often planning lavish birthday getaways and traveling with their partner, with a particular interest in Japan. Financially prudent, they focus on savings. Music and club culture matter to them; they love music, appreciate album sequencing, and are nostalgic for the 2009 club scene while being a hip‑hop/rap enthusiast. They stay active through fitness, especially Black Sky Fitness, and are a cannabis‑using Christian. Active on social media, they use Bluesky, moderate communities, and may subscribe to new platforms. They value realism, continuous learning, history, and literacy, often commenting on social issues. As a senior Black member of AARP, they enjoy big birthday celebrations and milestones."
+
+    User Question:
+    What are the top attractions to visit in Osaka, Japan?
+
+    Example Output1:
+    {
+        "Justification": "The user enjoys travelling and has a particular interest in Japan, so they are likely to ask this question.",
+        "MatchUserProfile": "YES",
+        "PersonalisedAnswer": "If you’re doing a short, romantic Osaka trip with your partner (and you love sweet snacks + nightlife + a little history), here’s a tailored “greatest hits” list from the reference answer—plus how to enjoy each one your way.
+      The Osaka “musts” that fit you best
+      1) Dotonbori + a neon date-night loop (romance + snacks)
+      Go around dusk, take photos by the river (hello, Glico sign), then graze: takoyaki / okonomiyaki, and hunt for fun candies/biscuits in the shopping streets nearby.
+      Add a Tombori River Cruise at night for peak “birthday getaway” vibes (it’s short, scenic, and very date-friendly). 
+      2) Umeda Sky Building for skyline + couple moment
+      It’s one of the best “wow” viewpoints—great for reflective, romantic people who like a big memory photo. (OSAKA-INFO also notes the rooftop observatory and its city views.)
+      3) Universal Studios Japan for a big celebration day
+      Perfect for a “lavish birthday getaway” day. If you’re into Nintendo/nostalgia, SUPER NINTENDO WORLD is the headline area. 
+      Pro tip: USJ notes you may need an Area Timed Entry Ticket to enter SUPER NINTENDO WORLD. 
+      If either of you is a Potter fan, Wizarding World is another easy win. 
+      4) Osaka Castle + Osaka Museum of History (history + realism)
+      Do these together for a satisfying “Osaka story arc”: castle grounds + then the museum context nearby (great if you like history and literacy/learning). 
+      5) Shinsekai + Tsutenkaku Tower (nostalgic neighborhood energy)
+      This is the “retro Osaka” zone—fun if you’re nostalgic for older eras of nightlife/city culture. It’s also great for casual street photos and snacky eats. 
+      6) Kaiyukan Aquarium (chill, immersive, couple-friendly)
+      A calmer day that still feels special—excellent if you want a break from crowds while still doing something iconic.
+      7) Shitenno-ji + Sumiyoshi Taisha (quiet + meaningful)
+      For a peaceful, reflective reset (and if faith/spirituality matters to you, these can feel grounding even as a visitor). Shitenno-ji is widely noted as one of Japan’s oldest temples (founded 593). 
+      8) Namba Yasaka Shrine (quick, unique, photogenic)
+      The giant lion-head “stage” is the whole point—easy to slot in before dinner or nightlife. 
+      A 4-day partner itinerary that flows well
+      Day 1 (Minami night): Dotonbori → dessert/candy browsing → Tombori River Cruise → late dinner 
+      Day 2 (History + views): Osaka Castle → Osaka Museum of History → sunset at Umeda Sky Building 
+      Day 3 (Big splurge): Universal Studios Japan all day (plan Timed Entry for SNW) 
+      Day 4 (Chill + retro): Kaiyukan → Shinsekai/Tsutenkaku → final-night photos + snacks 
+      Nightlife nod (for that “2009 club scene” itch)
+      If you want one “proper club night,” clubJOULE is a long-running Osaka staple and posts its events. 
+      (If you tell me your exact dates + what you want—hip-hop/rap night vs dance/throwback energy—I can suggest how to pick the best neighborhood for staying out late.)
+      Quick Japan practicality (important)
+      Japan is very strict about drugs; don’t bring cannabis products (including some edibles/oils). 
+      Also double-check any OTC meds you’d normally travel with (some common decongestants can be an issue). 
+      If you share how many days you’re thinking (3? 5? 7?) and whether you prefer more food/nightlife vs more temples/museums, I’ll tighten this into the cleanest day-by-day plan (with a “splurge birthday dinner” slot and a budget-friendly version)."
+          }
+
+
+    Example Input2:
+    User Profile: 
+    example_user_8 is a German‑speaking resident of Germany (likely the Harz region or Münster) with a strong appetite for cultural and culinary traditions, from proverbs to German street food and vegetarian fare. They run a coffee habit, love cooking, and relish specific foods like Harzer cheese, hot dogs, boiled eggs, and tomatoes. Their aesthetic side leans toward timeless design, furniture (especially Vitra), and cozy, comfortable environments. Technologically, they are a power‑user who creates AI‑generated images, critiques AI chatbots, works as a system administrator/bot developer, and holds logistics and forklift credentials, while staying security‑oriented. They are active on social media, track metrics, and inject sarcastic, sometimes vulgar or sexual humor into conversations. Environmentally conscious, they champion sustainability. Politically, they are engaged in German and international law topics, hold conservative, pro‑strong‑state views, are critical of liberal policies and East German integration, and employ selective content blocking to manage misinformation. They also enjoy cars, value a driver’s license, stay health‑conscious through walking and outdoor activities, are a parent of young children, and have niche fandoms for Bobo and Turbofreds.
+
+    User Question:    
+    Hello, I bought two mattresses from Costco on 12/5/2023, now the mattresses are on sale for $120 dollars cheaper each. Usually the time to claim the price difference is 30 days, but the courtesy policy I read from reddit is 90 days. What can I tell them in order to get the price difference back?
+
+    Example Output2:
+    {
+        "Justification": "The user is a German resident where Costco does not operate and they use euros instead of dollars, so they are unlikely to ask this question.",
+        "MatchUserProfile": "NO",
+        "PersonalisedAnswer": "N/A"
+    }
+
+    Now, given the following user profile and question, please only output in the format of JSON.
+    User Profile: TEMPLATE_USER_PROFILE
+    Question: TEMPLATE_QUESTION
+
+
+

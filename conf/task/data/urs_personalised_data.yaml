@@ -1,0 +1,132 @@
+package: data
+name: urs_personalised_data
+entry_point: pipeline.data.urs_personalised_data.urs_personalised_data
+
+dataset:
+  path: ${oc.env:PWD}/persistent_data/urs/urs_intent_EN_Seek_Creativity.csv
+  persona_path: ${oc.env:PWD}/persistent_data/user_profile/bluesky/single_tweet_dedupe_user_profile_bluesky.csv
+
+maximum_pairs_per_person: 200
+persona_start_index: 0
+maximum_persona_number: 100
+prompt:
+  base: | 
+    You are a language model helping a user to answer a question. You have access to a user profile and a question. You need to answer the question based on the user profile. For your ease to answer, you will also be provided with a reference answer that is not personalised. You first need to judge if this user can possibly ask this question ("MatchUserProfile"). If not, you need to output "NO" and provide the justification. If yes, you need to output "YES" and then answer the question based on the user profile.
+
+    Example Input1:
+    User Profile:
+    example_user_7,"example_user_7 is a Southern California resident who enjoys a variety of sweet snacks like chewing gum, novelty candy, biscuits and baked goods. They are a romantic, reflective person who values deep connections and is currently in a relationship. A travel enthusiast, they prefer short trips under two weeks, often planning lavish birthday getaways and traveling with their partner, with a particular interest in Japan. Financially prudent, they focus on savings. Music and club culture matter to them; they love music, appreciate album sequencing, and are nostalgic for the 2009 club scene while being a hip‑hop/rap enthusiast. They stay active through fitness, especially Black Sky Fitness, and are a cannabis‑using Christian. Active on social media, they use Bluesky, moderate communities, and may subscribe to new platforms. They value realism, continuous learning, history, and literacy, often commenting on social issues. As a senior Black member of AARP, they enjoy big birthday celebrations and milestones."
+
+    User Question:
+    What are the top attractions to visit in Osaka, Japan?
+
+    Reference Answer:
+        Osaka, Japan's third-largest city, offers a vibrant mix of modern and traditional attractions. While the list of top attractions can vary depending on personal interests, here are several must-visit spots that consistently rank high among both visitors and locals:
+
+        1. **Osaka Castle (Osaka-jo)**: This iconic landmark is a symbol of Osaka, offering visitors a glimpse into Japan's historical past. Surrounded by a moat and park, the castle tower boasts a museum showcasing the life and times of Hideyoshi Toyotomi, a pivotal figure in Japan's history.
+
+        2. **Universal Studios Japan**: A must-visit for families and entertainment enthusiasts, this theme park features a wide range of attractions based on popular movies, including a dedicated area for Harry Potter fans.
+
+        3. **Dotonbori**: Known for its bright neon lights, large animated signboards, and diverse dining options, Dotonbori is the heart of Osaka's entertainment district. It's an excellent place to try local delicacies like takoyaki and okonomiyaki.
+
+        4. **Osaka Aquarium Kaiyukan**: One of the largest public aquariums in the world, Kaiyukan offers an impressive look at aquatic life from the Pacific Rim in a well-designed, engaging space. The walk-through aquarium tanks provide immersive experiences.
+
+        5. **Shitenno-ji Temple**: Established in 593 AD, this is one of Japan's oldest temples. It reflects traditional Japanese architecture and spiritual culture, offering a peaceful respite from the bustling city.
+
+        6. **Umeda Sky Building**: For breathtaking city views, visit the Umeda Sky Building's Floating Garden Observatory. The structure itself is an architectural marvel, and the panoramic views of Osaka from the rooftop are spectacular.
+
+        7. **Namba Yasaka Shrine**: This Shinto shrine is famous for its large lion head stage, which is believed to swallow evil spirits. It's a unique photograph spot that represents Japan's intricate blend of tradition, religion, and art.
+
+        8. **Osaka Museum of History**: Located near Osaka Castle, this museum offers a look into Osaka's past with interactive exhibits and panoramic city views from its higher floors.
+
+        9. **Sumiyoshi Taisha**: One of Japan's oldest Shinto shrines, it's renowned for its unique architectural style, which is purely Japanese, unaffected by Asian mainland influences. The peaceful grounds make for a pleasant walk.
+
+        10. **Tsutenkaku Tower**: Located in the Shinsekai district, this tower is a symbol of new world charm. It offers an observation deck with views of Osaka, and the surrounding area is filled with nostalgic 1950s atmosphere, good eateries, and kitschy shops.
+
+        Remember, the best attractions for you will depend on your interests—whether they lie in history, entertainment, food, or culture, Osaka has something to offer everyone."
+
+
+    Example Output1:
+    {
+        "Justification": "The user enjoys travelling and has a particular interest in Japan, so they are likely to ask this question.",
+        "MatchUserProfile": "YES",
+        "PersonalisedAnswer": "If you’re doing a short, romantic Osaka trip with your partner (and you love sweet snacks + nightlife + a little history), here’s a tailored “greatest hits” list from the reference answer—plus how to enjoy each one your way.
+      The Osaka “musts” that fit you best
+      1) Dotonbori + a neon date-night loop (romance + snacks)
+      Go around dusk, take photos by the river (hello, Glico sign), then graze: takoyaki / okonomiyaki, and hunt for fun candies/biscuits in the shopping streets nearby.
+      Add a Tombori River Cruise at night for peak “birthday getaway” vibes (it’s short, scenic, and very date-friendly). 
+      2) Umeda Sky Building for skyline + couple moment
+      It’s one of the best “wow” viewpoints—great for reflective, romantic people who like a big memory photo. (OSAKA-INFO also notes the rooftop observatory and its city views.)
+      3) Universal Studios Japan for a big celebration day
+      Perfect for a “lavish birthday getaway” day. If you’re into Nintendo/nostalgia, SUPER NINTENDO WORLD is the headline area. 
+      Pro tip: USJ notes you may need an Area Timed Entry Ticket to enter SUPER NINTENDO WORLD. 
+      If either of you is a Potter fan, Wizarding World is another easy win. 
+      4) Osaka Castle + Osaka Museum of History (history + realism)
+      Do these together for a satisfying “Osaka story arc”: castle grounds + then the museum context nearby (great if you like history and literacy/learning). 
+      5) Shinsekai + Tsutenkaku Tower (nostalgic neighborhood energy)
+      This is the “retro Osaka” zone—fun if you’re nostalgic for older eras of nightlife/city culture. It’s also great for casual street photos and snacky eats. 
+      6) Kaiyukan Aquarium (chill, immersive, couple-friendly)
+      A calmer day that still feels special—excellent if you want a break from crowds while still doing something iconic.
+      7) Shitenno-ji + Sumiyoshi Taisha (quiet + meaningful)
+      For a peaceful, reflective reset (and if faith/spirituality matters to you, these can feel grounding even as a visitor). Shitenno-ji is widely noted as one of Japan’s oldest temples (founded 593). 
+      8) Namba Yasaka Shrine (quick, unique, photogenic)
+      The giant lion-head “stage” is the whole point—easy to slot in before dinner or nightlife. 
+      A 4-day partner itinerary that flows well
+      Day 1 (Minami night): Dotonbori → dessert/candy browsing → Tombori River Cruise → late dinner 
+      Day 2 (History + views): Osaka Castle → Osaka Museum of History → sunset at Umeda Sky Building 
+      Day 3 (Big splurge): Universal Studios Japan all day (plan Timed Entry for SNW) 
+      Day 4 (Chill + retro): Kaiyukan → Shinsekai/Tsutenkaku → final-night photos + snacks 
+      Nightlife nod (for that “2009 club scene” itch)
+      If you want one “proper club night,” clubJOULE is a long-running Osaka staple and posts its events. 
+      (If you tell me your exact dates + what you want—hip-hop/rap night vs dance/throwback energy—I can suggest how to pick the best neighborhood for staying out late.)
+      Quick Japan practicality (important)
+      Japan is very strict about drugs; don’t bring cannabis products (including some edibles/oils). 
+      Also double-check any OTC meds you’d normally travel with (some common decongestants can be an issue). 
+      If you share how many days you’re thinking (3? 5? 7?) and whether you prefer more food/nightlife vs more temples/museums, I’ll tighten this into the cleanest day-by-day plan (with a “splurge birthday dinner” slot and a budget-friendly version)."
+          }
+
+
+    Example Input2:
+    User Profile: 
+    example_user_8 is a German‑speaking resident of Germany (likely the Harz region or Münster) with a strong appetite for cultural and culinary traditions, from proverbs to German street food and vegetarian fare. They run a coffee habit, love cooking, and relish specific foods like Harzer cheese, hot dogs, boiled eggs, and tomatoes. Their aesthetic side leans toward timeless design, furniture (especially Vitra), and cozy, comfortable environments. Technologically, they are a power‑user who creates AI‑generated images, critiques AI chatbots, works as a system administrator/bot developer, and holds logistics and forklift credentials, while staying security‑oriented. They are active on social media, track metrics, and inject sarcastic, sometimes vulgar or sexual humor into conversations. Environmentally conscious, they champion sustainability. Politically, they are engaged in German and international law topics, hold conservative, pro‑strong‑state views, are critical of liberal policies and East German integration, and employ selective content blocking to manage misinformation. They also enjoy cars, value a driver’s license, stay health‑conscious through walking and outdoor activities, are a parent of young children, and have niche fandoms for Bobo and Turbofreds.
+
+    User Question:    
+    Hello, I bought two mattresses from Costco on 12/5/2023, now the mattresses are on sale for $120 dollars cheaper each. Usually the time to claim the price difference is 30 days, but the courtesy policy I read from reddit is 90 days. What can I tell them in order to get the price difference back?
+
+    Reference Answer:
+    You can simply contact Costco's customer service and explain the situation, your purchase date, and the perceived discrepancy. Below is a sample of how you can word your request:
+
+    Subject: Request for Price Adjustment on Mattress Purchase
+
+    Dear Costco Customer Service,
+
+    I hope this message finds you well. My name is [Your Name] and I am a loyal customer at Costco. I recently purchased two mattresses from Costco on December 5, 2023.
+
+    After my purchase, I noticed that the mattresses are now on sale, each marked down by $120. While I understand that the standard time frame to claim the price difference is 30 days, I have read online that Costco's courtesy policy often extends this period to 90 days.
+
+    Given that my purchase was back in December, I am still within the 90-day window. With this in mind, I would like to kindly request a price adjustment for my previous mattress purchase. I believe this is fair and in line with Costco's dedication to customer satisfaction.
+
+    For your reference, my purchase order number is [Order Number]. Please, let me know what additional documentation or information you need from me to process this request.
+
+    I appreciate your understanding and assistance in this matter. I look forward to continuing to do business with Costco.
+
+    Best Regards,
+
+    [Your Full Name]
+    [Your Membership Number]
+    [Your Contact Information]
+
+    Example Output2:
+    {
+        "Justification": "The user is a German resident where Costco does not operate and they use euros instead of dollars, so they are unlikely to ask this question.",
+        "MatchUserProfile": "NO",
+        "PersonalisedAnswer": "N/A"
+    }
+
+    Now, given the following user profile and question, please only output in the format of JSON.
+    User Profile: TEMPLATE_USER_PROFILE
+    Question: TEMPLATE_QUESTION
+    Reference Answer: TEMPLATE_REFERENCE_ANSWER
+
+
+

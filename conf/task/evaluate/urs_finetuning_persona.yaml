@@ -1,0 +1,15 @@
+package: evaluate
+name: urs_finetuning_persona
+entry_point: pipeline.evaluate.urs_finetuning_persona.urs_finetuning_persona
+
+
+dataset:
+  path: ${oc.env:PWD}/persistent_data/eval/urs_eval_prompt_list.csv
+  down_sample_size: -1
+
+prompt: 
+  base: TEMPLATE_PROMPT
+
+vllm_use_chat_template: true
+vllm_chat_template_enable_thinking: false
+vllm_chat_template_use_system_prompt: true

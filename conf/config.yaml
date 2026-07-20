@@ -1,0 +1,20 @@
+defaults:
+  - task: persona/social_media_twitter_persona
+  - model: gptoss120b
+  - inference: vllm
+
+
+
+experiment:
+  output_dir: ${oc.env:PWD}/outputs/${task.package}/${task.name}/${model.name}
+  seed: 42
+  debug_print: false
+  persistent_data_dir: ${oc.env:PWD}/persistent_data/
+  saving_frequency: 2
+  setup_logging: pipeline.utils.setup_logging
+
+wandb:
+  project: "behavior-grounding"
+  resume: false  # Set to true to resume from latest checkpoint
+  wandb_id: null  # Manual wandb run ID to use when resuming (fallback if not found in checkpoint)
+  resume_path: null  # Manual checkpoint path (takes priority over automatic detection)

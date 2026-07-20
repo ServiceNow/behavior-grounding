@@ -1,0 +1,19 @@
+package: evaluate
+name: urs
+entry_point: pipeline.evaluate.urs.urs
+
+
+dataset:
+  path: ${oc.env:DATA_ROOT}/URS/URS_dataset.csv
+  user_intention: "Ask_for_Advice"
+  language: "EN"
+  user_profile_path: ${oc.env:PWD}/persistent_data/user_profile/twitter/summary_deduped_single_tweet_persona.csv
+
+maximum_persona_number: 50
+maximum_question_number: 100
+
+prompt: 
+  base: |
+    TEMPLATE_QUESTION
+
+  use_user_profile: False

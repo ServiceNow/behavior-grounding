@@ -1,0 +1,17 @@
+package: data
+name: urs_personalised_data_baseline
+entry_point: pipeline.data.urs_personalised_data.urs_personalised_data
+
+dataset:
+  path: ${oc.env:PWD}/persistent_data/urs/urs_intent_EN_Seek_Creativity.csv
+  persona_path: ${oc.env:PWD}/persistent_data/user_profile/bluesky/single_tweet_dedupe_user_profile_bluesky.csv
+
+maximum_pairs_per_person: 200
+persona_start_index: 0
+maximum_persona_number: 100
+prompt:
+  base: | 
+    TEMPLATE_QUESTION
+
+
+

@@ -1,0 +1,33 @@
+package: data
+name: recommendation_recbench_interest
+entry_point: pipeline.data.recommendation_recbench_interest.recommendation_recbench_interest
+
+dataset:
+  name: mind  # Options: mind, pens, goodreads, books, movielens, microlens, netflix, cds, lastfm, hm, pog, electronics, steam, hotelrec, yelp
+  base_path: ${oc.env:DATA_ROOT}/RecBench/RecBench  # Base path to RecBench preprocessed data
+  load_method: pipeline.data.recommendation_recbench_interest.load_recbench_pool
+  persona_path: ${oc.env:PWD}/persistent_data/user_profile/bluesky/single_tweet_dedupe_user_profile_bluesky.csv
+
+maximum_product_number_per_person: 200
+persona_start_index: 0
+maximum_persona_number: 1000
+
+
+prompt:
+  topic: null  # Auto-detected from dataset if null (e.g., "news articles", "books", "movies")
+  base: | 
+    You are a recommender. You are given a TEMPLATE_ITEM_TYPE and a user's profile. You need to predict if this user would be interested in this item and provide your justification for your answer.
+    Please return your answer in JSON format. If the user is interested in the item, return "YES". If the user is not interested in the item, return "NO". If you are not sure, return "MAYBE".
+
+    Example Output Format:
+    {
+        "Justification": <your justification for your answer>,
+        "IsInterested": <YES or NO or MAYBE>
+    }
+
+
+    Now, given the following input, please predict if the user would be interested in the item and provide your justification for your answer. Only output in the format of JSON.
+    TEMPLATE_ITEM_TYPE: TEMPLATE_ITEM_DESCRIPTION
+    User Name: TEMPLATE_USER_NAME
+    User Profile: TEMPLATE_USER_PROFILE
+

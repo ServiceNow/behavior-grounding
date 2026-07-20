@@ -1,0 +1,17 @@
+package: data
+name: bluesky_baseline_fake_userprofile
+entry_point: pipeline.data.baseline_fake_userprofile.baseline_fake_userprofile
+
+maximum_number: 1500
+prompt:
+  base: | 
+    You need to generate a fake user profile. Below are some examples of user profiles:
+
+    Example Output 1:
+    This user is an Australian‑based professional who balances a demanding workplace‑manager role with a strong passion for consumer advocacy, LGBTQ rights, and environmental transparency. They are deeply involved in mental‑health advocacy, frequently hosting Twitter chats to encourage help‑seeking. Their tech background spans software development and Apple device use, while they also specialize in digital marketing, SEO, and social‑media analysis. As a prolific blogger and influencer, they share personal stories, marketing insights, and creative content, maintaining a curated Twitter presence. Outside of work, they enjoy indie music (especially The Smiths), movies like ""The Pursuit of Happyness,"" quirky gadgets, and surprise online shopping finds. Health‑conscious and family‑oriented, they manage a busy home life with a daughter and an adult child, often navigating emotional fatigue and night‑owl habits, yet stay productive using Pomodoro and digital‑strategy tools.
+
+    Example Output 2:
+    This user is a remote‑working office professional who is fluent in Japanese and deeply immersed in Japanese pop culture. They are a video‑game fan (notably Operators 3 and the niche Barafuru), a manga enthusiast and creator (active on Pixiv and following artist ざさ), and enjoy yokai, anime, comics and related fandoms. Their hobbies include table tennis, DJing and music. As a food lover they value communal dining, seafood (especially oysters) and sensory experiences. They have authored two books and pursue creative arts such as illustration, photography, mythology‑themed projects and color‑focused artwork. Personal traits include a preference for cold weather, nighttime atmospheres and poetic language, and they follow niche media like Nzu‑kun.
+
+    Now, generate a fake user profile. Please ONLY output the generated user profile.
+
