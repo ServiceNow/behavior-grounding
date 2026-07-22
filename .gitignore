@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+
+# Experiment artifacts
+outputs/
+output/
+wandb/
+*.log
+
+# Local data & model weights (see README: DATA_ROOT / MODEL_ROOT)
+persistent_data/
+model/
+*.ckpt
+*.safetensors
+
+# Env
+.env
+init.env

@@ -17,6 +17,12 @@ nuanced, idiosyncratic signals that drive real preferences. We study them under 
 
 
 
+![Framework overview](assets/figure1_framework.png)
+
+*Our framework for user profile synthesis and utilization. We extract open-ended user profiles from user behaviour
+sequences (e.g. social-media posts). With these diverse, realistic profiles we synthesize SFT data to parametrically
+align models for personalization tasks, and additionally study test-time multi-perspective reasoning.*
+
 ## Repository layout
 
 ```
@@ -106,6 +112,26 @@ Override any config value on the command line, e.g.
 
 Outputs default to `outputs/<package>/<task>/<model>/`. Experiment tracking via Weights & Biases is configured in
 `conf/config.yaml`.
+
+## Results
+
+Downstream results for the Qwen3 models, comparing **No Profile** (base model), the **Synthetic** baseline, and our
+**Open-Ended** behaviorally grounded profiles. RecBench columns (Netflix, Books, News) report F1; URS columns
+(Leisure, Creativity, Advice, Avg.) report the 1–10 LLM-judge score. Higher is better; **bold** = best per column
+within each model.
+
+| Model | Variant | Netflix (F1) | Books (F1) | News (F1) | Leisure | Creativity | Advice | Avg. |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Qwen3-8B  | No Profile | 0.421 | 0.515 | 0.318 | 5.48 | 5.31 | 5.99 | 5.59 |
+|           | Synthetic  | 0.420 | 0.625 | 0.319 | 6.34 | 6.72 | 7.08 | 6.72 |
+|           | Open-Ended | **0.450** | **0.649** | **0.322** | **6.76** | **7.40** | **7.65** | **7.27** |
+| Qwen3-14B | No Profile | 0.419 | 0.308 | 0.303 | **7.49** | 7.90 | 8.06 | 7.82 |
+|           | Synthetic  | 0.416 | 0.538 | **0.327** | 7.06 | 7.54 | 7.91 | 7.50 |
+|           | Open-Ended | **0.459** | **0.632** | 0.321 | 7.29 | **8.10** | **8.27** | **7.88** |
+| Qwen3-32B | No Profile | 0.403 | 0.569 | 0.308 | 6.79 | 7.09 | 6.90 | 6.93 |
+|           | Synthetic  | 0.427 | 0.580 | **0.317** | 7.20 | 7.87 | 8.06 | 7.71 |
+|           | Open-Ended | **0.455** | **0.658** | 0.315 | **7.35** | **8.06** | **8.23** | **7.88** |
+
 
 ## Data
 
